@@ -1,6 +1,6 @@
 #include "Minimap.h"
-
-Minimap::Minimap(SDL_Renderer* render, int wigth, int heigth,Map&mp) :BasicGraphic(render, wigth, heigth),map(mp)
+#include <cmath>
+Minimap::Minimap(SDL_Renderer* render, int wigth, int heigth,Map&mp,Player&pl) :BasicGraphic(render, wigth, heigth),map(mp),player(pl)
 {
 
 }
@@ -17,13 +17,20 @@ void Minimap::print()
 	SDL_RenderClear(ren);
 	SDL_SetRenderDrawColor(ren, 0x00, 0x00, 0x00, 0x00);
 	int size = map.getSize();
-	int yms = wt/size ;
-	int xms = ht/size;
+	int yms = ht/size ;
+	int xms = wt/size;
 	for (int i = 0; i < size; i++) 
 		for (int j = 0; j < size; j++) {
-			SDL_Rect dstrect = {j*yms , i*xms, yms, xms };
+			SDL_Rect dstrect = {i*xms , j*yms, xms, yms };
 			if (map.at(i, j) == 1)
 				SDL_RenderFillRect(ren, &dstrect);
 		
 		}
+	int r = 10;
+	double plx = player.getX() * xms / 100;
+	double ply = player.getY() * yms / 100;
+	for (double t = 0; t < 2 * M_PI; t += 0.01)
+		SDL_RenderDrawPoint(ren, plx -r+ r * std::cos(t) + r, ply+ r * std::sin(t));
+	SDL_RenderDrawLine(ren, plx , ply,plx+ 20* cos(player.getAngle()),ply- 20* sin(player.getAngle()));
 }
+// * cos(player.getAngle()* sin(player.getAngle())

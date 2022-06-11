@@ -2,6 +2,7 @@
 #include "BasicGraphic.h"
 #include "Map.h"
 #include "Minimap.h"
+#include "Player.h"
 class GameGraphic :
     public BasicGraphic
 {
@@ -11,7 +12,7 @@ public:
 	GameGraphic(SDL_Renderer* , int , int );
 	bool load() override;
 	void print() override;
-	void turnMinimap(Map*);
+	void turnMinimap(Map*,Player*);
 	~GameGraphic();
 };
 

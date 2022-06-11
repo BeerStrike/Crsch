@@ -6,8 +6,13 @@ Map::Map(std::ifstream& fin)
     map = new int* [size];
     for (int i = 0; i < size; i++) {
         map[i] = new int[size];
-        for (int j = 0; j < size; j++)
+        for (int j = 0; j < size; j++) {
             fin >> map[i][j];
+            if (map[i][j] == 2) {
+                startx = i;
+                starty = j;
+            }
+        }
     }
     fin.close();
 }
@@ -30,6 +35,17 @@ int Map::getSize()
 {
     return size;
 }
+
+int Map::getPlayerX()
+{
+    return startx;
+}
+
+int Map::getPlayerY()
+{
+    return starty;
+}
+
 
 Map::~Map()
 {

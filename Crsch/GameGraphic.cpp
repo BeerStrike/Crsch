@@ -19,14 +19,14 @@ void GameGraphic::print()
     SDL_RenderPresent(ren);
 }
 
-void GameGraphic::turnMinimap(Map *mp)
+void GameGraphic::turnMinimap(Map *mp,Player* pl)
 {
     if (minimap) {
         delete minimap;
         minimap = nullptr;
     }
     else {
-        minimap = new Minimap(ren, wt, ht, *mp);
+        minimap = new Minimap(ren, wt, ht, *mp,*pl);
     }
 }
 
