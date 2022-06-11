@@ -13,5 +13,51 @@
       <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
       <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
     </Filter>
+    <Filter Include="Исходные файлы\Graphic">
+      <UniqueIdentifier>{110acdcd-d384-4411-9677-fa365cf03774}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Файлы заголовков\Graphic">
+      <UniqueIdentifier>{d82e35b1-c7d4-4a73-87ba-e2d664021de9}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="main.cpp">
+      <Filter>Исходные файлы</Filter>
+    </ClCompile>
+    <ClCompile Include="MainMenu.cpp">
+      <Filter>Исходные файлы</Filter>
+    </ClCompile>
+    <ClCompile Include="GMainMenu.cpp">
+      <Filter>Исходные файлы\Graphic</Filter>
+    </ClCompile>
+    <ClCompile Include="MainGameClass.cpp">
+      <Filter>Исходные файлы</Filter>
+    </ClCompile>
+    <ClCompile Include="GameGraphic.cpp">
+      <Filter>Исходные файлы\Graphic</Filter>
+    </ClCompile>
+    <ClCompile Include="Map.cpp">
+      <Filter>Исходные файлы</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="MainMenu.h">
+      <Filter>Файлы заголовков</Filter>
+    </ClInclude>
+    <ClInclude Include="BasicGraphic.h">
+      <Filter>Файлы заголовков\Graphic</Filter>
+    </ClInclude>
+    <ClInclude Include="GMainMenu.h">
+      <Filter>Файлы заголовков\Graphic</Filter>
+    </ClInclude>
+    <ClInclude Include="MainGameClass.h">
+      <Filter>Файлы заголовков</Filter>
+    </ClInclude>
+    <ClInclude Include="GameGraphic.h">
+      <Filter>Файлы заголовков\Graphic</Filter>
+    </ClInclude>
+    <ClInclude Include="Map.h">
+      <Filter>Файлы заголовков</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>
