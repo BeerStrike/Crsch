@@ -42,6 +42,7 @@ int main(int argc, char* argv[])
 	if (!mnu.load())
 		return 1;
 	if (mnu.start()) {
+		Game.load("Maps/lvl1.txt");
 		Game.start();
 	}
 	else

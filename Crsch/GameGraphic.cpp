@@ -11,4 +11,27 @@ bool GameGraphic::load()
 
 void GameGraphic::print()
 {
+    SDL_SetRenderDrawColor(ren, 0xFF, 0xFF, 0xFF, 0xFF);
+    SDL_RenderClear(ren);
+    SDL_SetRenderDrawColor(ren, 0x00, 0x00, 0x00, 0x00);
+    if (minimap)
+        minimap->print();
+    SDL_RenderPresent(ren);
+}
+
+void GameGraphic::turnMinimap(Map *mp)
+{
+    if (minimap) {
+        delete minimap;
+        minimap = nullptr;
+    }
+    else {
+        minimap = new Minimap(ren, wt, ht, *mp);
+    }
+}
+
+GameGraphic::~GameGraphic()
+{
+    if (minimap)
+        delete minimap;
 }

@@ -1,17 +1,14 @@
 #pragma once
 #include "BasicGraphic.h"
 #include "Map.h"
-#include "Minimap.h"
-class GameGraphic :
+class Minimap :
     public BasicGraphic
 {
 private:
-	Minimap* minimap;
+		Map& map;
 public:
-	GameGraphic(SDL_Renderer* , int , int );
+	Minimap(SDL_Renderer*, int, int,Map&);
 	bool load() override;
 	void print() override;
-	void turnMinimap(Map*);
-	~GameGraphic();
 };
 

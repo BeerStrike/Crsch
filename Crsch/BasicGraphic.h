@@ -14,5 +14,11 @@ public:
 	virtual bool load() = 0;
 	virtual void print()=0;
 	virtual ~BasicGraphic() {}
+	int getWt() {
+		return wt;
+	}
+	int getHt(){
+		return ht;
+	}
 };
 
