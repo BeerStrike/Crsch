@@ -118,13 +118,13 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>C:\Users\dimko\source\repos\Crsch\SDL2-2.0.22\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>C:\Users\dimko\source\repos\Crsch\SDL2_image-2.0.5\include;C:\Users\dimko\source\repos\Crsch\SDLttf\include;C:\Users\dimko\source\repos\Crsch\SDL2-2.0.22\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalLibraryDirectories>C:\Users\dimko\source\repos\Crsch\SDL2-2.0.22\lib\x64;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
-      <AdditionalDependencies>SDL2.lib;SDL2main.lib;SDL2test.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>C:\Users\dimko\source\repos\Crsch\SDL2_image-2.0.5\lib\x64;C:\Users\dimko\source\repos\Crsch\SDLttf\lib\x64;C:\Users\dimko\source\repos\Crsch\SDL2-2.0.22\lib\x64;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalDependencies>SDL2_image.lib;SDL2.lib;SDL2main.lib;SDL2_ttf.lib;SDL2test.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
@@ -144,6 +144,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="Enemy.cpp" />
     <ClCompile Include="GameGraphic.cpp" />
     <ClCompile Include="GMainMenu.cpp" />
     <ClCompile Include="main.cpp" />
@@ -151,16 +152,19 @@
     <ClCompile Include="MainMenu.cpp" />
     <ClCompile Include="Map.cpp" />
     <ClCompile Include="Minimap.cpp" />
+    <ClCompile Include="person.cpp" />
     <ClCompile Include="Player.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="BasicGraphic.h" />
+    <ClInclude Include="Enemy.h" />
     <ClInclude Include="GameGraphic.h" />
     <ClInclude Include="GMainMenu.h" />
     <ClInclude Include="MainGameClass.h" />
     <ClInclude Include="MainMenu.h" />
     <ClInclude Include="Map.h" />
     <ClInclude Include="Minimap.h" />
+    <ClInclude Include="person.h" />
     <ClInclude Include="Player.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

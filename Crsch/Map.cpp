@@ -12,6 +12,10 @@ Map::Map(std::ifstream& fin)
                 startx = i;
                 starty = j;
             }
+            else if (map[i][j] == 3) {
+                enemiesX.push_back(i);
+                enemiesY.push_back(j);
+            }
         }
     }
     fin.close();
@@ -47,6 +51,21 @@ int Map::getPlayerX()
 int Map::getPlayerY()
 {
     return starty;
+}
+
+int Map::getEnemiesNum()
+{
+    return enemiesX.size();
+}
+
+int Map::getEnemiesX(int n)
+{
+    return enemiesX[n];
+}
+
+int Map::getEnemiesY(int n)
+{
+    return enemiesY[n];
 }
 
 

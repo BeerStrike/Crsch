@@ -1,11 +1,8 @@
 #define _USE_MATH_DEFINES
 #include "Player.h"
 #include <cmath>
-Player::Player(Map* mp)
+Player::Player(Map* mp):Person(mp, mp->getPlayerX() * 100 + 50, mp->getPlayerY() * 100 + 50)
 {
-	map = mp;
-	x = mp->getPlayerX()*100+50;
-	y = mp->getPlayerY()*100+50;
 	angle = 0;
 }
 
@@ -55,17 +52,6 @@ double* Player::raycast(int num)
 	}
 	return heights;
 }
-
-int Player::getX()
-{
-	return  static_cast<int>(x);
-}
-
-int Player::getY()
-{
-	return static_cast<int>(y);
-}
-
 double Player::getAngle()
 {
 	return angle;

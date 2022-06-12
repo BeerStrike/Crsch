@@ -1,20 +1,38 @@
 #include <SDL.h>
+#include <SDL_ttf.h>
 #include <cmath>
 #include "MainMenu.h"
 #include "MainGameClass.h"
+#include <SDL_image.h>
 #define W 800
 #define H 600
 
 int main(int argc, char* argv[])
 {
 	if (SDL_Init(SDL_INIT_EVERYTHING) < 0)
+	{
+		SDL_LogError(SDL_LOG_CATEGORY_APPLICATION, "Err SLD_Init: %s", SDL_GetError());
 		return 1;
+	}
 	SDL_Window* window = SDL_CreateWindow("PR5", SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, W, H, SDL_WINDOW_SHOWN);
 	if (!window)
+	{
+		SDL_LogError(SDL_LOG_CATEGORY_APPLICATION, "Err create window: %s", SDL_GetError());
 		return 1;
+	}
 	SDL_Renderer* ren = SDL_CreateRenderer(window, -1, SDL_RENDERER_ACCELERATED);
 	if (!ren)
+	{
+		SDL_LogError(SDL_LOG_CATEGORY_APPLICATION, "Err create render: %s", SDL_GetError());
 		return 1;
+	}
+	if (TTF_Init() < 0) {
+		printf("Err load TTF library");
+	}
+	if (!(IMG_Init(IMG_INIT_PNG) & IMG_INIT_PNG)){
+		SDL_LogError(SDL_LOG_CATEGORY_APPLICATION, "Err IMG_Init: %s", SDL_GetError());
+		return 1;
+	}
 	SDL_Surface* img=SDL_LoadBMP("Textures/title.bmp");
 	if (!img) {
 		SDL_LogError(SDL_LOG_CATEGORY_APPLICATION, "Couldn't create surface from image: %s", SDL_GetError());

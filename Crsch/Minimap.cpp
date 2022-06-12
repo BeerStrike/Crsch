@@ -1,6 +1,6 @@
 #include "Minimap.h"
 #include <cmath>
-Minimap::Minimap(SDL_Renderer* render, int wigth, int heigth,Map&mp,Player&pl) :BasicGraphic(render, wigth, heigth),map(mp),player(pl)
+Minimap::Minimap(SDL_Renderer* render, int wigth, int heigth, Map& mp, Player& pl, std::vector<Enemy*>& ene) :BasicGraphic(render, wigth, heigth), map(mp), player(pl), enemies(ene)
 {
 
 }
@@ -31,6 +31,11 @@ void Minimap::print()
 	double ply = player.getY() * yms / 100;
 	for (double t = 0; t < 2 * M_PI; t += 0.01)
 		SDL_RenderDrawPoint(ren, plx -r+ r * std::cos(t) + r, ply+ r * std::sin(t));
+	for (int i = 0; i < enemies.size(); i++) {
+		for (double t = 0; t < 2 * M_PI; t += 0.01)
+			SDL_RenderDrawPoint(ren, enemies[i]->getX() * xms / 100 - r + r * std::cos(t) + r, enemies[i]->getY() * yms / 100 + r * std::sin(t));
+	}
+
 	SDL_RenderDrawLine(ren, plx , ply,plx+ 20* cos(player.getAngle()),ply- 20* sin(player.getAngle()));
 }
 // * cos(player.getAngle()* sin(player.getAngle())

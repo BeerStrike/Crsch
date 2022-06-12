@@ -1,9 +1,10 @@
 #include "GMainMenu.h"
-
+#include "SDL_ttf.h"
 GMainMenu::GMainMenu(SDL_Renderer* render, int wigth, int heigth) :BasicGraphic(render, wigth, heigth)
 {
 	btnnum = 4;
 	onNum = 0;
+	gFont = nullptr;
 }
 
 bool GMainMenu::load()
@@ -21,6 +22,7 @@ bool GMainMenu::load()
 		return false;
 	}
 	btn= SDL_CreateTextureFromSurface(ren, img);
+	SDL_FreeSurface(img);
 	img = SDL_LoadBMP("Textures/onMenuButton.bmp");
 	if (!img) {
 		SDL_LogError(SDL_LOG_CATEGORY_APPLICATION, "Couldn't load onMenuButton.bmp: %s", SDL_GetError());
@@ -28,6 +30,13 @@ bool GMainMenu::load()
 	}
 	onBtn = SDL_CreateTextureFromSurface(ren, img);
 	SDL_FreeSurface(img);
+	gFont = TTF_OpenFont("Fonts/cs.ttf", 16);
+	if (!gFont) {
+		SDL_LogError(SDL_LOG_CATEGORY_APPLICATION, "Couldn't load font: %s", SDL_GetError());
+		return false;
+	}
+	img = TTF_RenderUTF8_Solid(gFont,"Start game", { 0xff,0xff,0xff });
+	texts[0]= SDL_CreateTextureFromSurface(ren, img);
 	return true;
 }
 
@@ -44,6 +53,7 @@ void GMainMenu::print()
 			SDL_RenderCopy(ren, onBtn, NULL, &dstrect);
 		else
 			SDL_RenderCopy(ren, btn, NULL, &dstrect);
+		SDL_RenderCopy(ren, texts[i], NULL, &dstrect);
 	}
 	SDL_RenderPresent(ren);
 }

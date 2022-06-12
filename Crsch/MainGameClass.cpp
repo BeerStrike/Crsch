@@ -14,6 +14,8 @@ bool MainGameClass::load(std::string mapName )
 		return false;
 	}
 	player = new Player(map);
+	for (int i = 0; i < map->getEnemiesNum(); i++)
+		Enemies.push_back( new Enemy(map, player, map->getEnemiesX(i), map->getEnemiesY(i)));
     return Grf.load();
 }
 
@@ -28,6 +30,8 @@ bool MainGameClass::start()
 	while (!quit) {
 		Grf.setRaycastRes(player->raycast(Grf.getWt()/5));
 		Grf.print();
+		for (int i = 0; i < Enemies.size(); i++)
+			Enemies[i]->goToPlayer(0.1);
 		if(walkfrw)
 			player->movefrw(0.1);
 		if(walkback)
@@ -40,7 +44,7 @@ bool MainGameClass::start()
 			if (event.type == SDL_KEYUP) {
 				switch (event.key.keysym.sym) {
 				case SDLK_F5:
-					Grf.turnMinimap(map,player);
+					Grf.turnMinimap(map,player,Enemies);
 					break;
 				case SDLK_UP:
 					walkfrw = false;
@@ -79,6 +83,9 @@ bool MainGameClass::start()
 
 MainGameClass::~MainGameClass()
 {
+	for (Enemy* i : Enemies)
+		if (i)
+			delete i;
 	if (player)
 		delete player;
 	if (map)

@@ -1,12 +1,10 @@
 #pragma once
 #include "Map.h"
-class Player
+#include "person.h"
+class Player:public Person
 {
 private:
-	double x;
-	double y;
 	double angle;
-	Map *map;
 public:
 	Player(Map*);
 	void movefrw(double);
@@ -14,8 +12,6 @@ public:
 	void rotateLeft(double);
 	void rotateRight(double);
 	double* raycast(int);
-	int getX();
-	int getY();
 	double getAngle();
 };
 
