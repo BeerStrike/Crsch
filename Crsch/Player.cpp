@@ -35,6 +35,27 @@ void Player::rotateRight(double rte)
 	angle = angle - rte;
 }
 
+double* Player::raycast(int num)
+{
+	double* heights=new double[2*num];
+	double step = (M_PI / 3) / num;
+	int n = 0;
+	double mgs =300;
+	for (double i = angle+M_PI / 6; i > angle-M_PI / 6; i -= step) {
+		for (int j = 0; j < mgs; j++) {
+			int xm = (x + j * cos(i)) / 100;
+			int ym = (y +  - j * sin(i)) / 100;
+			if (map->at(xm, ym) == 1) {
+				double nw = (mgs - j) / mgs;
+				heights[n]=nw;
+				break;
+			}
+		}
+		n++;
+	}
+	return heights;
+}
+
 int Player::getX()
 {
 	return  static_cast<int>(x);

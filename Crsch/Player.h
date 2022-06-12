@@ -13,6 +13,7 @@ public:
 	void moveBack(double);
 	void rotateLeft(double);
 	void rotateRight(double);
+	double* raycast(int);
 	int getX();
 	int getY();
 	double getAngle();

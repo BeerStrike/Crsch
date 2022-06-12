@@ -28,7 +28,10 @@ Map* Map::make(std::string str)
 
 int Map::at(int x, int y)
 {
-    return  map[x][y];
+    if (x < size && y < size&&x>=0&&y>=0)
+        return  map[x][y];
+    else
+        return 0;
 }
 
 int Map::getSize()
