@@ -13,7 +13,7 @@ private:
 		std::vector<Enemy*>& enemies;
 public:
 	Minimap(SDL_Renderer*, int, int,Map&,Player&,std::vector<Enemy*>&);
-	bool load() override;
+	bool load() ;
 	void print() override;
 };
 

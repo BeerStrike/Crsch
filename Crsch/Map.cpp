@@ -11,17 +11,14 @@ Map::Map(std::ifstream& fin)
             if (map[i][j] == 2) {
                 startx = i;
                 starty = j;
-            }
-            else if (map[i][j] == 3) {
-                enemiesX.push_back(i);
-                enemiesY.push_back(j);
+                map[i][j] = 0;
             }
         }
     }
     fin.close();
 }
 
-Map* Map::make(std::string str)
+Map* Map::load(std::string str)
 {
     std::ifstream fin(str);
     if (fin)
@@ -53,19 +50,9 @@ int Map::getPlayerY()
     return starty;
 }
 
-int Map::getEnemiesNum()
+void Map::setCell(int x, int y, int nw)
 {
-    return enemiesX.size();
-}
-
-int Map::getEnemiesX(int n)
-{
-    return enemiesX[n];
-}
-
-int Map::getEnemiesY(int n)
-{
-    return enemiesY[n];
+    map[x][y] = nw;
 }
 
 

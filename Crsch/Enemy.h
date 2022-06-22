@@ -1,7 +1,8 @@
 #pragma once
 #include "Map.h"
+#include "person.h"
 #include "Player.h"
-#include "Person.h"
+class Player;
 class Enemy:public Person
 {
 private:

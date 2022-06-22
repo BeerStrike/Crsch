@@ -14,7 +14,7 @@ int main(int argc, char* argv[])
 		SDL_LogError(SDL_LOG_CATEGORY_APPLICATION, "Err SLD_Init: %s", SDL_GetError());
 		return 1;
 	}
-	SDL_Window* window = SDL_CreateWindow("PR5", SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, W, H, SDL_WINDOW_SHOWN);
+	SDL_Window* window = SDL_CreateWindow("Flanders", SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, W, H, SDL_WINDOW_SHOWN);
 	if (!window)
 	{
 		SDL_LogError(SDL_LOG_CATEGORY_APPLICATION, "Err create window: %s", SDL_GetError());
@@ -55,15 +55,18 @@ int main(int argc, char* argv[])
 				quit = true;
 		}
 	}
-	MainMenu mnu(ren, W, H);
+	MainMenu* mnu=MainMenu::load(ren, W, H);
 	MainGameClass Game(ren, W, H);
-	if (!mnu.load())
+	if (!mnu)
 		return 1;
-	if (mnu.start()) {
-		Game.load("Maps/lvl1.txt");
-		Game.start();
+	while (true) {
+		if (mnu->start()) {
+			Game.load("Maps/lvl1.txt");
+			if (!Game.start())
+				break;
+		}
+		else
+			return 0;
 	}
-	else
-		return 0;
 	return 0;
 }

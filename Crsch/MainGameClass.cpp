@@ -1,45 +1,63 @@
 #include "MainGameClass.h"
-
-MainGameClass::MainGameClass(SDL_Renderer* render, int wight, int height) :Grf(render, wight, height)
+#include <fstream>
+MainGameClass::MainGameClass(Map*mp,Player*pl,GameGraphic* gr):map(mp),player(pl),map(mp)
 {
-	map = nullptr;
-	player = nullptr;
 }
 
-bool MainGameClass::load(std::string mapName )
+MainGameClass* MainGameClass::load(std::string mapName )
 {
-	map = Map::make(mapName);
+	Map* map = Map::load(mapName);
 	if (!map) {
 		SDL_LogError(SDL_LOG_CATEGORY_APPLICATION, "Couldn't open map: %s", mapName.c_str());
 		return false;
 	}
-	player = new Player(map);
-	for (int i = 0; i < map->getEnemiesNum(); i++)
-		Enemies.push_back( new Enemy(map, player, map->getEnemiesX(i), map->getEnemiesY(i)));
-    return Grf.load();
+	Player* pl = new Player(map);
+    return new MainGameClass()
 }
 
 bool MainGameClass::start()
 {
 	SDL_Event event;
+	long long startTime = time(nullptr);
 	bool quit = false;
 	bool walkfrw = false;
 	bool walkback = false;
 	bool turnLeft = false;
 	bool turnRight = false;
+	unsigned int a;
+	unsigned int b;
 	while (!quit) {
-		Grf.setRaycastRes(player->raycast(Grf.getWt()/5));
+		a = SDL_GetTicks();
+		Grf.setRaycastRes(player->raycast(Grf.getWt()/5, Enemies));
+		Grf.setEnemycastRes(player->enemycast(Grf.getWt() / 5, Enemies));
 		Grf.print();
 		for (int i = 0; i < Enemies.size(); i++)
 			Enemies[i]->goToPlayer(0.1);
-		if(walkfrw)
-			player->movefrw(0.1);
-		if(walkback)
-			player->moveBack(0.1);
+		bool fin = false;
+		if (walkfrw)
+			if (player->movefrw(0.2*b))
+				fin =true;
+		if (walkback)
+			if (player->moveBack(0.2*b))
+				fin= true;
+		if (fin) {
+			std::ofstream fout("recs.txt");
+			fout << time(nullptr) - startTime;
+			fout.close();
+			Grf.victory();
+			bool q = true;
+			while (q) {
+				while (SDL_PollEvent(&event)) {
+					if (event.type == SDL_KEYDOWN)
+						q = false;
+				}
+			}
+			return true;
+		}
 		if(turnLeft)
-			player->rotateLeft(0.005);
+			player->rotateLeft(0.003*b);
 		if(turnRight)
-			player->rotateRight(0.005);
+			player->rotateRight(0.003*b);
 		while (SDL_PollEvent(&event)) {
 			if (event.type == SDL_KEYUP) {
 				switch (event.key.keysym.sym) {
@@ -58,6 +76,38 @@ bool MainGameClass::start()
 				case SDLK_RIGHT:
 					turnRight = false;
 					break;
+				case SDLK_ESCAPE: {
+					SDL_MessageBoxData mbox;
+					SDL_MessageBoxButtonData mboxButton[2];
+					const SDL_MessageBoxColorScheme colorScheme =
+					{
+						{
+							{ 200, 200, 200 },
+							{   0,   0,   0 },
+							{ 255, 255, 255 },
+							{ 150, 150, 150 },
+							{ 255, 255, 255 }
+						}
+					};
+					mboxButton[0].buttonid = 0;
+					mboxButton[0].flags = SDL_MESSAGEBOX_BUTTON_RETURNKEY_DEFAULT | SDL_MESSAGEBOX_BUTTON_ESCAPEKEY_DEFAULT;
+					mboxButton[0].text = "Continue";
+					mboxButton[1].buttonid = 1;
+					mboxButton[1].flags = SDL_MESSAGEBOX_BUTTON_RETURNKEY_DEFAULT | SDL_MESSAGEBOX_BUTTON_ESCAPEKEY_DEFAULT;
+					mboxButton[1].text = "Go to menu";
+					mbox.flags = SDL_MESSAGEBOX_INFORMATION;
+					mbox.window =NULL;
+					mbox.title = "Pause";
+					mbox.message = "Pause";
+					mbox.numbuttons = 2;
+					mbox.buttons = mboxButton;
+					mbox.colorScheme = &colorScheme;
+					int btnid=0;
+					SDL_ShowMessageBox(&mbox, &btnid) ;
+					if (btnid == 1)
+						return true;
+
+				}break;
 				}
 			}
 			else if (event.type == SDL_KEYDOWN) {
@@ -74,9 +124,16 @@ bool MainGameClass::start()
 				case SDLK_RIGHT:
 					turnRight = true;
 					break;
+				case SDLK_LCTRL:
+					player->shot(Enemies);
+					break;
 				}
 			}
+			else if (event.type == SDL_QUIT)
+				quit = true;
 		}
+		b = SDL_GetTicks() - a;
+		///SDL_Delay(10 - b > 0 ? 10 - b : 0);
 	}
 	return false;
 }

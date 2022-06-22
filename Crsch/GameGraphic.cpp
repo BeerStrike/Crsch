@@ -1,6 +1,6 @@
 #include "GameGraphic.h"
 #include <SDL_image.h>
-GameGraphic::GameGraphic(SDL_Renderer* render, int wigth, int heigth) :BasicGraphic(render, wigth, heigth)
+GameGraphic::GameGraphic(SDL_Renderer* render, int wigth, int heigth, std::vector<Enemy*>& enm) :BasicGraphic(render, wigth, heigth),enemies(enm)
 {
     walltext1 = walltext2 = background = nullptr;
     raycastRes = nullptr;
@@ -32,10 +32,17 @@ bool GameGraphic::load()
     SDL_FreeSurface(img);
     img = IMG_Load("Textures/gun.png");
     if (!img) {
-        SDL_LogError(SDL_LOG_CATEGORY_APPLICATION, "Couldn't load gun.bmp: %s", SDL_GetError());
+        SDL_LogError(SDL_LOG_CATEGORY_APPLICATION, "Couldn't load gun.png: %s", SDL_GetError());
         return false;
     }
     gun[0]= SDL_CreateTextureFromSurface(ren, img);
+    SDL_FreeSurface(img);
+    img = IMG_Load("Textures/enemy.png");
+    if (!img) {
+        SDL_LogError(SDL_LOG_CATEGORY_APPLICATION, "Couldn't load enemy.png: %s", SDL_GetError());
+        return false;
+    }
+    enemytext = SDL_CreateTextureFromSurface(ren, img);
     SDL_FreeSurface(img);
 }
 
@@ -60,10 +67,27 @@ void GameGraphic::print()
             cnt+=5;
         }
     }
+    if (enemycastRes[0] != -1) {
+        SDL_Rect dstrect = { wt*enemycastRes[1] ,  ht / 2 - enemycastRes[0] * ht , 50, 2 * enemycastRes[0] * ht };
+        SDL_RenderCopy(ren, enemytext, NULL, &dstrect);
+    }
     SDL_RenderCopy(ren, gun[0], NULL, &dstrect);
     if (minimap)
         minimap->print();
     SDL_RenderPresent(ren);
+}
+
+bool GameGraphic::victory()
+{
+    SDL_Surface* img = SDL_LoadBMP("Textures/win.bmp");
+    if (!img) {
+        SDL_LogError(SDL_LOG_CATEGORY_APPLICATION, "Couldn't load win.bmp: %s", SDL_GetError());
+        return false;
+    }
+    SDL_Rect dstrect = { 0 ,  0, wt, ht };
+    SDL_RenderCopy(ren, SDL_CreateTextureFromSurface(ren, img) , NULL, &dstrect);
+    SDL_RenderPresent(ren);
+    return true;
 }
 
 void GameGraphic::setRaycastRes(double*rcres)
@@ -71,6 +95,13 @@ void GameGraphic::setRaycastRes(double*rcres)
     if (raycastRes)
         delete raycastRes;
     raycastRes = rcres;
+}
+
+void GameGraphic::setEnemycastRes(double*ecres)
+{
+    if (raycastRes)
+        delete enemycastRes;
+    enemycastRes = ecres;
 }
 
 void GameGraphic::turnMinimap(Map *mp,Player* pl,std:: vector<Enemy*>& enem)

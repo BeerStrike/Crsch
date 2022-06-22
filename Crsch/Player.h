@@ -1,17 +1,22 @@
 #pragma once
 #include "Map.h"
 #include "person.h"
+#include <vector>
+#include "Enemy.h"
+class Enemy;
 class Player:public Person
 {
 private:
 	double angle;
 public:
 	Player(Map*);
-	void movefrw(double);
-	void moveBack(double);
+	bool movefrw(double);
+	bool moveBack(double);
 	void rotateLeft(double);
 	void rotateRight(double);
-	double* raycast(int);
+	void shot(std::vector<Enemy*>&);
+	double* raycast(int, std::vector<Enemy*>&);
+	double* enemycast(int, std::vector<Enemy*>&);
 	double getAngle();
 };
 

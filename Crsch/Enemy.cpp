@@ -10,15 +10,19 @@ void Enemy::goToPlayer(double step)
 	double nwx;
 	double nwy;
 	if (player->getX() > x)
-		nwx=x+ step;
+		nwx = x + step;
 	else if (player->getX() < x)
 		nwx = x - step;
+	else nwx = x;
 	if (player->getY() > y)
-		nwy=y + step;
+		nwy = y + step;
 	else if (player->getY() < y)
-		nwy=y - step;
+		nwy = y - step;
+	else
+		nwy = y;
 	if (map->at(static_cast<int>(nwx / 100), static_cast<int>(nwy / 100)) != 1) {
 		x = nwx;
 		y = nwy;
 	}
+
 }

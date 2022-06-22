@@ -14,13 +14,18 @@ private:
 	SDL_Texture* walltext1;
 	SDL_Texture* walltext2;
 	SDL_Texture* background;
+	SDL_Texture* enemytext;
 	SDL_Texture* gun[2];
 	double* raycastRes;
+	double* enemycastRes;
+	std::vector<Enemy*>& enemies;
 public:
-	GameGraphic(SDL_Renderer* , int , int );
-	bool load() override;
+	GameGraphic(SDL_Renderer*  , int , int,std::vector<Enemy*>& );
+	bool load() ;
 	void print() override;
+	bool victory();
 	void setRaycastRes(double*);
+	void setEnemycastRes(double*);
 	void turnMinimap(Map*,Player*,std::vector<Enemy*>&);
 	~GameGraphic();
 };

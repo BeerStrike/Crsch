@@ -13,10 +13,11 @@ private:
 	Map* map;
 	Player* player;
 	std::vector<Enemy*> Enemies;
-public:
 	MainGameClass(SDL_Renderer*, int, int);
-	bool load(std::string);
+public:
+	static MainGameClass* load(std::string);
 	bool start();
 	~MainGameClass();
 };
+
 

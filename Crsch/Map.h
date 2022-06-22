@@ -10,17 +10,13 @@ private:
 	int** map;
 	int startx;
 	int starty;
-	std::vector<int> enemiesX;
-	std::vector<int> enemiesY;
 public:
-	static Map* make(std::string);
+	static Map* load(std::string);
 	int at(int, int);
 	int getSize();
 	int getPlayerX();
 	int getPlayerY();
-	int getEnemiesNum();
-	int getEnemiesX(int);
-	int getEnemiesY(int);
+	void setCell(int, int, int);
 	~Map();
 };
 
