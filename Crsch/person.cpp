@@ -1,10 +1,7 @@
 #include "person.h"
 
-Person::Person(Map* mp,int xn,int yn)
+Person::Person(Map* mp,int xn,int yn,int h):map(mp),x(xn),y(yn),hp(h)
 {
-	map = mp;
-	x = xn;
-	y = yn;
 }
 int Person::getX()
 {
@@ -14,4 +11,10 @@ int Person::getX()
 int Person::getY()
 {
 	return static_cast<int>(y);
+}
+
+bool Person::getDamage(int dmg)
+{
+	hp -= dmg;
+	return hp <= 0;
 }

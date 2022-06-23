@@ -6,11 +6,6 @@ Minimap::Minimap(SDL_Renderer* render, int wigth, int heigth, Map& mp, Player& p
 }
 
 
-bool Minimap::load()
-{
-	return true;
-}
-
 void Minimap::print()
 {
 	SDL_SetRenderDrawColor(ren, 0xFF, 0xFF, 0xFF, 0xFF);

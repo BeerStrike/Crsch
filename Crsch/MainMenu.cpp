@@ -12,7 +12,12 @@ MainMenu::MainMenu(GMainMenu* gf) :Grf(gf), chzn(0), numBtn(4), myName("")
 	return nullptr;
 }
 
-bool MainMenu::start()
+ MainMenu::~MainMenu()
+ {
+	 delete Grf;
+ }
+
+ MainGameClass* MainMenu::start()
 {
 	SDL_Event event;
 	bool quit = false;
@@ -25,11 +30,14 @@ bool MainMenu::start()
 					switch (event.key.keysym.sym) {
 					case SDLK_RETURN:
 						quit = true;
+						break;
 					case SDLK_BACKSPACE:
+						if(myName.length()!=0)
 						myName.pop_back();
+						break;
 					}
 				else 	if (event.type == SDL_QUIT)
-					return false;
+					return nullptr;
 
 			}
 		}
@@ -57,7 +65,7 @@ bool MainMenu::start()
 					switch (chzn)
 					{
 					case 0:
-						return true;
+						return MainGameClass::load(Grf->getRen(),Grf->getWt(),Grf->getHt(),"maps/lvl1.txt",myName);
 						break;
 					case 1: {
 						Grf->printScores();
@@ -82,7 +90,7 @@ bool MainMenu::start()
 					}
 						break;
 					case 3:
-						return false;
+						return nullptr;
 					default:
 						break;
 					}

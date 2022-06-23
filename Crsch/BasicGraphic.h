@@ -19,5 +19,8 @@ public:
 	int getHt(){
 		return ht;
 	}
+	SDL_Renderer* getRen() {
+		return ren;
+	}
 };
 

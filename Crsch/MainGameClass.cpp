@@ -1,24 +1,76 @@
 #include "MainGameClass.h"
 #include <fstream>
-MainGameClass::MainGameClass(Map*mp,Player*pl,GameGraphic* gr):map(mp),player(pl),map(mp)
+MainGameClass::MainGameClass(Map*mp,Player*pl,GameGraphic* gr, std::string plnm):map(mp),player(pl),Grf(gr),plname(plnm),startTime(-1)
 {
+	raycastBufer = new double[static_cast<int>(2*gr->getWt()/5)];
 }
 
-MainGameClass* MainGameClass::load(std::string mapName )
+MainGameClass* MainGameClass::load(SDL_Renderer*ren, int wt, int ht, std::string mapName,std::string plnme )
 {
+	GameGraphic *grf= GameGraphic::load(ren,wt,ht);
 	Map* map = Map::load(mapName);
 	if (!map) {
 		SDL_LogError(SDL_LOG_CATEGORY_APPLICATION, "Couldn't open map: %s", mapName.c_str());
-		return false;
+		return nullptr;
 	}
 	Player* pl = new Player(map);
-    return new MainGameClass()
+	return new MainGameClass(map, pl, grf,plnme);
+}
+
+bool MainGameClass::win()
+{
+	int rec = time(nullptr) - startTime;
+	std::ifstream fin("recs.txt");
+	std::vector<std::string> buf;
+	std::vector<int> rcs;
+	std::vector<int>recs;
+	std::string rd;
+	std::string lvlname;
+	getline(fin, lvlname, '\n');
+	fin.get();
+	fin.get();
+	while (getline(fin, rd, ':')) {
+		buf.push_back(rd);
+		int rc;
+		fin >> rc;
+		rcs.push_back(rc);
+		fin.get();
+		fin.get();
+		fin.get();
+	}
+	for (int i = 0; i < rcs.size(); i++)
+		if (rcs[i] > rec) {
+			rcs[i] = rec;
+			buf[i] = plname;
+			break;
+		}
+	fin.close();
+	std::ofstream fout("recs.txt");
+	fout << lvlname<<"\n";
+	for (int i = 0; i < buf.size(); i++) {
+		fout <<i+1<<")"<< buf[i] << ": " << rcs[i]<<std::endl;
+	}
+	fout.close();
+	Grf->victory();
+	bool q = true;
+	SDL_Event event;
+	while (q) {
+		while (SDL_PollEvent(&event)) {
+			if (event.type == SDL_KEYDOWN)
+				q = false;
+			else if (event.type == SDL_QUIT)
+				return false;
+		}
+	}
+	return true;
 }
 
 bool MainGameClass::start()
 {
 	SDL_Event event;
-	long long startTime = time(nullptr);
+    startTime = time(nullptr);
+	Grf->setEnemycastRes(enemycastBuf);
+	Grf->setRaycastRes(raycastBufer);
 	bool quit = false;
 	bool walkfrw = false;
 	bool walkback = false;
@@ -28,41 +80,39 @@ bool MainGameClass::start()
 	unsigned int b;
 	while (!quit) {
 		a = SDL_GetTicks();
-		Grf.setRaycastRes(player->raycast(Grf.getWt()/5, Enemies));
-		Grf.setEnemycastRes(player->enemycast(Grf.getWt() / 5, Enemies));
-		Grf.print();
+		player->raycast(raycastBufer, Grf->getWt() / 5, Enemies);
+		player->enemycast(enemycastBuf, Enemies);
+		Grf->print();
 		for (int i = 0; i < Enemies.size(); i++)
-			Enemies[i]->goToPlayer(0.1);
-		bool fin = false;
-		if (walkfrw)
-			if (player->movefrw(0.2*b))
-				fin =true;
-		if (walkback)
-			if (player->moveBack(0.2*b))
-				fin= true;
-		if (fin) {
-			std::ofstream fout("recs.txt");
-			fout << time(nullptr) - startTime;
-			fout.close();
-			Grf.victory();
-			bool q = true;
-			while (q) {
-				while (SDL_PollEvent(&event)) {
-					if (event.type == SDL_KEYDOWN)
-						q = false;
+			if (Enemies[i]->goToPlayer(1)) {
+				Grf->dead();
+				bool q = true;
+				while (q) {
+					while (SDL_PollEvent(&event)) {
+						if (event.type == SDL_KEYDOWN)
+							q = false;
+						else if (event.type == SDL_QUIT)
+							return false;
+					}
 				}
+				return true;
 			}
-			return true;
-		}
+				
+		if (walkfrw)
+			if (player->movefrw(3))
+				return win();
+		if (walkback)
+			if (player->moveBack(3))
+				return win();
 		if(turnLeft)
-			player->rotateLeft(0.003*b);
+			player->rotateLeft(0.05);
 		if(turnRight)
-			player->rotateRight(0.003*b);
+			player->rotateRight(0.05);
 		while (SDL_PollEvent(&event)) {
 			if (event.type == SDL_KEYUP) {
 				switch (event.key.keysym.sym) {
 				case SDLK_F5:
-					Grf.turnMinimap(map,player,Enemies);
+					Grf->turnMinimap(map,player,Enemies);
 					break;
 				case SDLK_UP:
 					walkfrw = false;
@@ -126,6 +176,7 @@ bool MainGameClass::start()
 					break;
 				case SDLK_LCTRL:
 					player->shot(Enemies);
+					Grf->shot();
 					break;
 				}
 			}
@@ -133,7 +184,7 @@ bool MainGameClass::start()
 				quit = true;
 		}
 		b = SDL_GetTicks() - a;
-		///SDL_Delay(10 - b > 0 ? 10 - b : 0);
+		SDL_Delay(20 > b  ? 20 - b : 0);
 	}
 	return false;
 }
@@ -143,8 +194,8 @@ MainGameClass::~MainGameClass()
 	for (Enemy* i : Enemies)
 		if (i)
 			delete i;
-	if (player)
-		delete player;
-	if (map)
-		delete map;
+	delete player;
+	delete map;
+	delete Grf;
+	delete[] raycastBufer;
 }

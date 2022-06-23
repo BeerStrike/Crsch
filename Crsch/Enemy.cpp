@@ -1,11 +1,11 @@
 #include "Enemy.h"
 
-Enemy::Enemy(Map*mp, Player*pl,int x,int y):Person(mp,x*100+50,y*100+50)
+Enemy::Enemy(Map*mp, Player*pl,int x,int y):Person(mp,x*100+50,y*100+50,100)
 {
 	player = pl;
 }
 
-void Enemy::goToPlayer(double step)
+bool Enemy::goToPlayer(double step)
 {
 	double nwx;
 	double nwy;
@@ -24,5 +24,7 @@ void Enemy::goToPlayer(double step)
 		x = nwx;
 		y = nwy;
 	}
-
+		if (sqrt(pow(player->getX() - x, 2) + pow(player->getY()-y, 2)) < 100)
+			return player->getDamage(20);
+		return false;
 }

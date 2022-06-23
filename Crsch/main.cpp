@@ -53,20 +53,28 @@ int main(int argc, char* argv[])
 		while (SDL_PollEvent(&event)) {
 			if (event.type == SDL_KEYDOWN || event.type == SDL_MOUSEBUTTONDOWN)
 				quit = true;
+			else if (event.type == SDL_QUIT) {
+				SDL_DestroyTexture(title);
+				return false;
+			}
 		}
 	}
+	SDL_DestroyTexture(title);
 	MainMenu* mnu=MainMenu::load(ren, W, H);
-	MainGameClass Game(ren, W, H);
-	if (!mnu)
+	if (!mnu) 
 		return 1;
 	while (true) {
-		if (mnu->start()) {
-			Game.load("Maps/lvl1.txt");
-			if (!Game.start())
-				break;
+		MainGameClass* game = mnu->start();
+		if (game) {
+			delete mnu;
+			if (!game->start())
+				return 1;
+			else {
+				delete game;
+				mnu = MainMenu::load(ren, W, H);
+			}
 		}
-		else
-			return 0;
+		else return 0;
 	}
 	return 0;
 }

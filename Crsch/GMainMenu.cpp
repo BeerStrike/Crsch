@@ -128,6 +128,8 @@ void GMainMenu::printNameInput(std::string nme)
 	SDL_Texture* tex = SDL_CreateTextureFromSurface(ren, img);
 	dstrect = { wt * 1 / 4,ht * 2 / 3,10*static_cast<int>(nme.length()),20 };
 	SDL_RenderCopy(ren, tex, NULL, &dstrect);
+	SDL_DestroyTexture(tex);
+	SDL_FreeSurface(img);
 	SDL_RenderPresent(ren);
 }
 
@@ -143,5 +145,5 @@ GMainMenu::~GMainMenu()
 	SDL_DestroyTexture(onBtn);
 	for (int i = 0; i < 8; i++)
 		if (texts[i])
-			delete texts[i];
+			SDL_DestroyTexture(texts[i]);
 }

@@ -1,7 +1,7 @@
 #define _USE_MATH_DEFINES
 #include "Player.h"
 #include <cmath>
-Player::Player(Map* mp):Person(mp, mp->getPlayerX() * 100 + 50, mp->getPlayerY() * 100 + 50)
+Player::Player(Map* mp):Person(mp, mp->getPlayerX() * 100 + 50, mp->getPlayerY() * 100 + 50,100)
 {
 	angle = 0;
 }
@@ -36,23 +36,22 @@ void Player::rotateRight(double rte)
 	angle = (angle - rte< 0) ? angle - rte + 2 * M_PI : angle - rte;
 }
 
-void Player::shot(std::vector<Enemy*>&enm)
+void Player::shot(std::vector<Enemy*>& enm)
 {
-	std::vector<Enemy*>::iterator i = enm.begin();
-	while(i!=enm.end()) {
-		if (sqrt(pow((*i)->getX() - x, 2) + pow((*i)->getY() - y, 2)) < 400) {
-			std::vector<Enemy*>::iterator dl = i;
-			i++;
-			enm.erase(dl);
-		//	if (i == enm.end())
-		//		break;
-		}else i++; 
+	for (int i = 0; i < enm.size(); i++) {
+		double xl = enm[i]->getX() - x;
+		double yl = enm[i]->getY()-y;
+		double l = sqrt(pow(xl, 2) + pow(yl, 2));
+		double ang =abs(( yl<=0?acos(xl / l): 2*M_PI-acos(xl / l))-angle);
+		if ( l< 400 &&ang<M_PI/20) {
+			if (enm[i]->getDamage(34))
+			enm.erase(enm.begin() + i);
+		}
 	}
 }
 
-double* Player::raycast(int num, std::vector<Enemy*>&enm)
+void Player::raycast(double* heights,int num, std::vector<Enemy*>&enm)
 {
-	double* heights=new double[2*num];
 	double step = (M_PI / 3) / num;
 	int n = 0;
 	double mgs =600;
@@ -75,24 +74,23 @@ double* Player::raycast(int num, std::vector<Enemy*>&enm)
 				heights[n] = nw*cos(i-angle); 
 				break;
 			}
+			else heights[n] = 0;
 		}
 		n++;
 	}
-	return heights;
 }
-double* Player::enemycast(int num, std::vector<Enemy*>& enm) {
-	double* res = new double [2*enm.size()+1];
-	int cnt = 0;
+void Player::enemycast(std::vector<double>& res, std::vector<Enemy*>& enm) {
+	res.clear();
 	for (Enemy* i : enm) {
-		if (abs(atan(tan(angle+M_PI/2)) - atan(abs((i->getX() - x) / (i->getY() - y)))) < M_PI / 6) {
-			res[cnt] = (400-sqrt(pow((i->getX() - x), 2) + pow((i->getY() - y), 2))) / 400;
-			res[cnt + 1] = (atan(tan(angle + M_PI / 2)) - atan(abs((i->getX() - x) / (i->getY() - y)))) + (M_PI / 6) / (M_PI / 3);
-			cnt+=2;
+		double xl = i->getX() - x;
+		double yl = i->getY() - y;
+		double l = sqrt(pow(xl, 2) + pow(yl, 2));
+		double ang =(yl <= 0 ? acos(xl / l) : 2 * M_PI - acos(xl / l)) - angle;
+		if (l < 600 && ang < M_PI /6) {
+			res.push_back((-ang + M_PI / 6) / (M_PI / 3));
+			res.push_back((600-l) / 600);
 		}
-			
 	}
-	res[cnt] = -1;
-	return res;
 }
 double Player::getAngle()
 {

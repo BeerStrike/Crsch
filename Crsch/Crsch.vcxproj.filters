@@ -51,9 +51,6 @@
     <ClCompile Include="person.cpp">
       <Filter>Исходные файлы</Filter>
     </ClCompile>
-    <ClCompile Include="GEnemy.cpp">
-      <Filter>Исходные файлы\Graphic</Filter>
-    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="MainMenu.h">
@@ -85,9 +82,6 @@
     </ClInclude>
     <ClInclude Include="person.h">
       <Filter>Файлы заголовков</Filter>
-    </ClInclude>
-    <ClInclude Include="GEnemy.h">
-      <Filter>Файлы заголовков\Graphic</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

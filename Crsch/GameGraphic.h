@@ -11,21 +11,22 @@ class GameGraphic :
 {
 private:
 	Minimap* minimap;
-	SDL_Texture* walltext1;
-	SDL_Texture* walltext2;
 	SDL_Texture* background;
 	SDL_Texture* enemytext;
-	SDL_Texture* gun[2];
+	SDL_Texture* gun;
+	SDL_Texture* gunf;
 	double* raycastRes;
-	double* enemycastRes;
-	std::vector<Enemy*>& enemies;
+	std::vector<double>* enemycastRes;
+	int timer;
+	GameGraphic(SDL_Renderer* , int , int , SDL_Texture* , SDL_Texture* , SDL_Texture* , SDL_Texture*);
 public:
-	GameGraphic(SDL_Renderer*  , int , int,std::vector<Enemy*>& );
-	bool load() ;
+	static GameGraphic* load(SDL_Renderer*, int, int);
 	void print() override;
 	bool victory();
+	void shot();
+	bool dead();
 	void setRaycastRes(double*);
-	void setEnemycastRes(double*);
+	void setEnemycastRes(std::vector<double>&);
 	void turnMinimap(Map*,Player*,std::vector<Enemy*>&);
 	~GameGraphic();
 };

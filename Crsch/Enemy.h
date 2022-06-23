@@ -9,6 +9,6 @@ private:
 	Player* player;
 public:
 	Enemy(Map*, Player*,int,int);
-	void goToPlayer(double);
+	bool goToPlayer(double);
 };
 

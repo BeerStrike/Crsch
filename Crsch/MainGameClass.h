@@ -9,13 +9,18 @@
 class MainGameClass
 {
 private:
-	GameGraphic Grf;
+	GameGraphic *Grf;
 	Map* map;
 	Player* player;
 	std::vector<Enemy*> Enemies;
-	MainGameClass(SDL_Renderer*, int, int);
+	std::string plname;
+	double* raycastBufer;
+	std::vector<double> enemycastBuf;
+	MainGameClass(Map* mp, Player* pl, GameGraphic* gr, std::string);
+	long long startTime;
 public:
-	static MainGameClass* load(std::string);
+	static MainGameClass* load(SDL_Renderer*, int, int,std::string, std::string);
+	bool win();
 	bool start();
 	~MainGameClass();
 };

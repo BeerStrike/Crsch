@@ -2,6 +2,7 @@
 #include <SDL.h>
 #include "GMainMenu.h"
 #include <string>
+#include "MainGameClass.h"
 class MainMenu
 {
 private:
@@ -12,6 +13,7 @@ private:
 	std::string myName;
 public:
 	static MainMenu* load(SDL_Renderer* render, int wight, int height);
-	bool start();
+	MainGameClass* start();
+	~MainMenu();
 };
 

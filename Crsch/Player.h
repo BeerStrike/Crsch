@@ -15,8 +15,8 @@ public:
 	void rotateLeft(double);
 	void rotateRight(double);
 	void shot(std::vector<Enemy*>&);
-	double* raycast(int, std::vector<Enemy*>&);
-	double* enemycast(int, std::vector<Enemy*>&);
+	void raycast(double*,int, std::vector<Enemy*>&);
+	void enemycast(std::vector<double>&, std::vector<Enemy*>&);
 	double getAngle();
 };
 
