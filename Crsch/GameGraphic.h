@@ -6,6 +6,7 @@
 #include <vector>
 #include "Enemy.h"
 #include <list>
+#include <SDL_ttf.h>
 class GameGraphic :
     public BasicGraphic
 {
@@ -15,14 +16,15 @@ private:
 	SDL_Texture* enemytext;
 	SDL_Texture* gun;
 	SDL_Texture* gunf;
+	TTF_Font* gFont;
 	double* raycastRes;
 	std::vector<double>* enemycastRes;
 	int timer;
-	GameGraphic(SDL_Renderer* , int , int , SDL_Texture* , SDL_Texture* , SDL_Texture* , SDL_Texture*);
+	GameGraphic(SDL_Renderer* , int , int , SDL_Texture* , SDL_Texture* , SDL_Texture* , SDL_Texture*,TTF_Font*);
 public:
 	static GameGraphic* load(SDL_Renderer*, int, int);
 	void print() override;
-	bool victory();
+	bool victory(int);
 	void shot();
 	bool dead();
 	void setRaycastRes(double*);

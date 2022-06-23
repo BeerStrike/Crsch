@@ -16,33 +16,41 @@ MainMenu::MainMenu(GMainMenu* gf) :Grf(gf), chzn(0), numBtn(4), myName("")
  {
 	 delete Grf;
  }
+ void MainMenu::setName(std::string nme) {
+	 myName = nme;
+ }
+ bool MainMenu::nameInput() {
+	 SDL_Event event;
+	 bool quit = false;
+	 while (!quit) {
+		 Grf->printNameInput(myName);
+		 while (SDL_PollEvent(&event)) {
+			 if (event.type == SDL_TEXTINPUT)  myName += event.text.text;
+			 else if (event.type == SDL_KEYUP)
+				 switch (event.key.keysym.sym) {
+				 case SDLK_RETURN:
+					 quit = true;
+					 break;
+				 case SDLK_BACKSPACE:
+					 if (myName.length() != 0)
+						 myName.pop_back();
+					 break;
+				 }
+			 else 	if (event.type == SDL_QUIT)
+				 return false;
 
+		 }
+		 SDL_Delay(100);
+	 }
+	 return true;
+ }
  MainGameClass* MainMenu::start()
 {
 	SDL_Event event;
 	bool quit = false;
-	if (myName == "") {
-		while (!quit) {
-			Grf->printNameInput(myName);
-			while (SDL_PollEvent(&event)) {
-				if (event.type == SDL_TEXTINPUT)  myName += event.text.text;
-				else if (event.type == SDL_KEYUP )
-					switch (event.key.keysym.sym) {
-					case SDLK_RETURN:
-						quit = true;
-						break;
-					case SDLK_BACKSPACE:
-						if(myName.length()!=0)
-						myName.pop_back();
-						break;
-					}
-				else 	if (event.type == SDL_QUIT)
-					return nullptr;
-
-			}
-		}
-	}
-	quit = false;
+	if (myName == "")
+		if (!nameInput())
+			return nullptr;
 	while (!quit) {
 		Grf->print();
 		while (SDL_PollEvent(&event)) {
@@ -64,27 +72,51 @@ MainMenu::MainMenu(GMainMenu* gf) :Grf(gf), chzn(0), numBtn(4), myName("")
 				case SDLK_RETURN:
 					switch (chzn)
 					{
-					case 0:
-						return MainGameClass::load(Grf->getRen(),Grf->getWt(),Grf->getHt(),"maps/lvl1.txt",myName);
+					case 0: {
+						Grf->printLvLchose();
+						bool q = false;
+						while (!q) {
+							while (SDL_PollEvent(&event)) {
+								if (event.type == SDL_KEYDOWN)
+									switch (event.key.keysym.sym) {
+									case SDLK_1:
+										return MainGameClass::load(Grf->getRen(), Grf->getWt(), Grf->getHt(), "maps/Level_1.txt", myName);
+									case SDLK_2:
+										return MainGameClass::load(Grf->getRen(), Grf->getWt(), Grf->getHt(), "maps/Level_2.txt", myName);
+									case SDLK_3:
+										return MainGameClass::load(Grf->getRen(), Grf->getWt(), Grf->getHt(), "maps/Level_3.txt", myName);
+									case SDLK_4:
+										return MainGameClass::load(Grf->getRen(), Grf->getWt(), Grf->getHt(), "maps/Level_4.txt", myName);
+									case SDLK_5:
+										return MainGameClass::load(Grf->getRen(), Grf->getWt(), Grf->getHt(), "maps/Level_5.txt", myName);
+									}if (event.type == SDL_QUIT)
+										q = quit = true;
+							}
+						}
+					}
 						break;
 					case 1: {
 						Grf->printScores();
-						bool q = true;
-						while (q) {
+						bool q = false;
+						while (!q) {
 							while (SDL_PollEvent(&event)) {
 								if (event.type == SDL_KEYDOWN)		
-									q = false;
+									q = true;
+								else if (event.type == SDL_QUIT)
+									q = quit = true;
 							}
 						}
 					}
 						  break;
 					case 2: {
 						Grf->printInfo();
-						bool q = true;
-						while (q) {
+						bool q = false;
+						while (!q) {
 							while (SDL_PollEvent(&event)) {
 								if (event.type == SDL_KEYDOWN)
-									q=false;
+									q=true;
+								else if(event.type == SDL_QUIT)
+									q = quit = true;
 							}
 						}
 					}
@@ -99,6 +131,7 @@ MainMenu::MainMenu(GMainMenu* gf) :Grf(gf), chzn(0), numBtn(4), myName("")
 			else if (event.type == SDL_QUIT)
 							quit = true;
 		}
+		SDL_Delay(100);
 	}
-
+	return nullptr;
 }

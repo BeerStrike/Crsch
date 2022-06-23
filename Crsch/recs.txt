@@ -1,6 +1,6 @@
 Уровень 1:
-1)Игрок 2: 19
-2)343: 31
-3)Пусто: 9999
-4)Пусто: 9999
-5)Пусто: 9999
+1): 15
+2) grgghxfgh: 15
+3)jkkjiofgjknjkjghmnhkjfgnfgngnkjgmndsrknmjhldgnmklnmhkljfgnhl: 15
+4): 16
+5): 16

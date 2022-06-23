@@ -63,8 +63,9 @@ void Player::raycast(double* heights,int num, std::vector<Enemy*>&enm)
 				map->setCell(xm, ym, 0);
 				enm.push_back(new Enemy(map, this, xm , ym));
 			}
-			if (map->at(xm, ym) == 1) {
-				while (map->at(xm, ym) == 1) {
+			if (map->at(xm, ym) == 1|| (map->at(xm, ym)>=6&& map->at(xm, ym)<=9)) {
+				int d= map->at(xm, ym);
+				while (map->at(xm, ym) == 1 || (map->at(xm, ym) >= 6 && map->at(xm, ym) <= 9)) {
 					xm = (x + j * cos(i)) / 100;
 					ym = (y + -j * sin(i)) / 100;
 					j--;
@@ -72,11 +73,15 @@ void Player::raycast(double* heights,int num, std::vector<Enemy*>&enm)
 				j++;
 				double nw = pow((mgs - j) / mgs,2);
 				heights[n] = nw*cos(i-angle); 
+				heights[n+1] =d;
 				break;
 			}
-			else heights[n] = 0;
+			else {
+				heights[n] = 0;
+				heights[n+1] = 0;
+			}
 		}
-		n++;
+		n+=2;
 	}
 }
 void Player::enemycast(std::vector<double>& res, std::vector<Enemy*>& enm) {

@@ -17,7 +17,7 @@ void Minimap::print()
 	for (int i = 0; i < size; i++) 
 		for (int j = 0; j < size; j++) {
 			SDL_Rect dstrect = {i*xms , j*yms, xms, yms };
-			if (map.at(i, j) == 1)
+			if (map.at(i, j) ==1 || (map.at(i, j) >= 6 && map.at(i, j) <= 9))
 				SDL_RenderFillRect(ren, &dstrect);
 		
 		}

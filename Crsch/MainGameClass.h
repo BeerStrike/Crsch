@@ -22,6 +22,8 @@ public:
 	static MainGameClass* load(SDL_Renderer*, int, int,std::string, std::string);
 	bool win();
 	bool start();
+	bool pause();
+	std::string getName();
 	~MainGameClass();
 };
 

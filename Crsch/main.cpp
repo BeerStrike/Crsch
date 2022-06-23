@@ -44,12 +44,12 @@ int main(int argc, char* argv[])
 	SDL_Rect dstrect = { 0, 0, W, H };
 	SDL_Event event;
 	bool quit = false;
+	SDL_SetRenderDrawColor(ren, 0xFF, 0xFF, 0xFF, 0xFF);
+	SDL_RenderClear(ren);
+	SDL_SetRenderDrawColor(ren, 0x00, 0x00, 0x00, 0x00);
+	SDL_RenderCopy(ren, title, NULL, &dstrect);
+	SDL_RenderPresent(ren);
 	while (!quit) {
-		SDL_SetRenderDrawColor(ren, 0xFF, 0xFF, 0xFF, 0xFF);
-		SDL_RenderClear(ren);
-		SDL_SetRenderDrawColor(ren, 0x00, 0x00, 0x00, 0x00);
-		SDL_RenderCopy(ren, title, NULL, &dstrect);
-		SDL_RenderPresent(ren);
 		while (SDL_PollEvent(&event)) {
 			if (event.type == SDL_KEYDOWN || event.type == SDL_MOUSEBUTTONDOWN)
 				quit = true;
@@ -58,6 +58,7 @@ int main(int argc, char* argv[])
 				return false;
 			}
 		}
+		SDL_Delay(100);
 	}
 	SDL_DestroyTexture(title);
 	MainMenu* mnu=MainMenu::load(ren, W, H);
@@ -70,8 +71,9 @@ int main(int argc, char* argv[])
 			if (!game->start())
 				return 1;
 			else {
-				delete game;
 				mnu = MainMenu::load(ren, W, H);
+				mnu->setName(game->getName());
+				delete game;
 			}
 		}
 		else return 0;

@@ -83,7 +83,7 @@ void GMainMenu::printInfo()
 	while(fin.getline(s, 1024, '\n')){
 		SDL_Surface* img = TTF_RenderUTF8_Solid(gFont, s, { 0x00,0x00,0x00 });
 		SDL_Texture* tex = SDL_CreateTextureFromSurface(ren, img);
-		SDL_Rect dstrect = { wt/4, ht / 4 +add*15,strlen(s)*10 , 20 };
+		SDL_Rect dstrect = { wt/4, ht / 4 +add*15,static_cast<int>(strlen(s))*10 , 20 };
 		SDL_RenderCopy(ren, tex, NULL, &dstrect);
 		SDL_FreeSurface(img);
 		SDL_DestroyTexture(tex);
@@ -104,7 +104,7 @@ void GMainMenu::printScores()
 	while (fin.getline(s, 1024, '\n')) {
 		SDL_Surface* img = TTF_RenderUTF8_Solid(gFont, s, { 0x00,0x00,0x00 });
 		SDL_Texture* tex = SDL_CreateTextureFromSurface(ren, img);
-		SDL_Rect dstrect = { wt / 4, ht / 4 + add * 15,strlen(s) * 10 , 20 };
+		SDL_Rect dstrect = { wt / 4, ht / 4 + add * 15,static_cast<int>(strlen(s)) * 10 , 20 };
 		SDL_RenderCopy(ren, tex, NULL, &dstrect);
 		SDL_FreeSurface(img);
 		SDL_DestroyTexture(tex);
@@ -124,9 +124,29 @@ void GMainMenu::printNameInput(std::string nme)
 	SDL_RenderCopy(ren, fone, NULL, &dstrect);
 	dstrect = { wt * 1 / 4,ht * 2 / 3,wt / 2,20 };
 	SDL_RenderFillRect(ren, &dstrect);
-	SDL_Surface* img = TTF_RenderUTF8_Solid(gFont, nme.c_str(), { 0x00,0x00,0x00 });
+	SDL_Surface* img = TTF_RenderUTF8_Solid(gFont, nme.length()<40?nme.c_str():(nme.substr(0, 37)+"...").c_str(), { 0x00,0x00,0x00 });
 	SDL_Texture* tex = SDL_CreateTextureFromSurface(ren, img);
-	dstrect = { wt * 1 / 4,ht * 2 / 3,10*static_cast<int>(nme.length()),20 };
+	dstrect = { wt * 1 / 4,ht * 2 / 3,10*static_cast<int>(nme.length()>30?30: nme.length()),20 };
+	SDL_RenderCopy(ren, tex, NULL, &dstrect);
+	SDL_DestroyTexture(tex);
+	SDL_FreeSurface(img);
+	img = TTF_RenderUTF8_Solid(gFont, u8"Введите имя:", { 0x00,0x00,0x00 });
+	tex = SDL_CreateTextureFromSurface(ren, img);
+	dstrect = { wt * 1 / 4,ht * 2 / 3-20,120,20 };
+	SDL_RenderCopy(ren, tex, NULL, &dstrect);
+	SDL_DestroyTexture(tex);
+	SDL_FreeSurface(img);
+	SDL_RenderPresent(ren);
+}
+
+void GMainMenu::printLvLchose()
+{
+	SDL_SetRenderDrawColor(ren, 0xFF, 0x00, 0x00, 0x00);
+	SDL_Rect dstrect = { wt*5 / 16, ht*4 / 8 ,wt / 3 , 25 };
+	SDL_RenderFillRect(ren, &dstrect);
+	SDL_SetRenderDrawColor(ren, 0x00, 0x00, 0x00, 0x00);
+	SDL_Surface*img = TTF_RenderUTF8_Solid(gFont, u8"Выберите уровень(1-5):", { 0x00,0x00,0x00 });
+	SDL_Texture* tex = SDL_CreateTextureFromSurface(ren, img);
 	SDL_RenderCopy(ren, tex, NULL, &dstrect);
 	SDL_DestroyTexture(tex);
 	SDL_FreeSurface(img);
@@ -142,6 +162,7 @@ GMainMenu::~GMainMenu()
 {
 	SDL_DestroyTexture(fone);
 	SDL_DestroyTexture(btn);
+	TTF_CloseFont(gFont);
 	SDL_DestroyTexture(onBtn);
 	for (int i = 0; i < 8; i++)
 		if (texts[i])

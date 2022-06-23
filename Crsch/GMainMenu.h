@@ -19,6 +19,7 @@ public:
 	void printInfo();
 	void printScores();
 	void printNameInput(std::string);
+	void printLvLchose();
 	void setOnBtn(int n);
 	~GMainMenu();
 };

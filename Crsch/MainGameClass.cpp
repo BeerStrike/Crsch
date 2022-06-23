@@ -2,7 +2,7 @@
 #include <fstream>
 MainGameClass::MainGameClass(Map*mp,Player*pl,GameGraphic* gr, std::string plnm):map(mp),player(pl),Grf(gr),plname(plnm),startTime(-1)
 {
-	raycastBufer = new double[static_cast<int>(2*gr->getWt()/5)];
+	raycastBufer = new double[static_cast<int>(2*gr->getWt()/5+2.0)];
 }
 
 MainGameClass* MainGameClass::load(SDL_Renderer*ren, int wt, int ht, std::string mapName,std::string plnme )
@@ -19,7 +19,7 @@ MainGameClass* MainGameClass::load(SDL_Renderer*ren, int wt, int ht, std::string
 
 bool MainGameClass::win()
 {
-	int rec = time(nullptr) - startTime;
+	int rec = static_cast<int>(time(nullptr) - startTime);
 	std::ifstream fin("recs.txt");
 	std::vector<std::string> buf;
 	std::vector<int> rcs;
@@ -51,8 +51,9 @@ bool MainGameClass::win()
 		fout <<i+1<<")"<< buf[i] << ": " << rcs[i]<<std::endl;
 	}
 	fout.close();
-	Grf->victory();
+	Grf->victory(rec);
 	bool q = true;
+	SDL_Delay(1000);
 	SDL_Event event;
 	while (q) {
 		while (SDL_PollEvent(&event)) {
@@ -84,8 +85,9 @@ bool MainGameClass::start()
 		player->enemycast(enemycastBuf, Enemies);
 		Grf->print();
 		for (int i = 0; i < Enemies.size(); i++)
-			if (Enemies[i]->goToPlayer(1)) {
+			if (Enemies[i]->goToPlayer(4)) {
 				Grf->dead();
+				SDL_Delay(1000);
 				bool q = true;
 				while (q) {
 					while (SDL_PollEvent(&event)) {
@@ -99,7 +101,7 @@ bool MainGameClass::start()
 			}
 				
 		if (walkfrw)
-			if (player->movefrw(3))
+			if (player->movefrw(4))
 				return win();
 		if (walkback)
 			if (player->moveBack(3))
@@ -127,36 +129,8 @@ bool MainGameClass::start()
 					turnRight = false;
 					break;
 				case SDLK_ESCAPE: {
-					SDL_MessageBoxData mbox;
-					SDL_MessageBoxButtonData mboxButton[2];
-					const SDL_MessageBoxColorScheme colorScheme =
-					{
-						{
-							{ 200, 200, 200 },
-							{   0,   0,   0 },
-							{ 255, 255, 255 },
-							{ 150, 150, 150 },
-							{ 255, 255, 255 }
-						}
-					};
-					mboxButton[0].buttonid = 0;
-					mboxButton[0].flags = SDL_MESSAGEBOX_BUTTON_RETURNKEY_DEFAULT | SDL_MESSAGEBOX_BUTTON_ESCAPEKEY_DEFAULT;
-					mboxButton[0].text = "Continue";
-					mboxButton[1].buttonid = 1;
-					mboxButton[1].flags = SDL_MESSAGEBOX_BUTTON_RETURNKEY_DEFAULT | SDL_MESSAGEBOX_BUTTON_ESCAPEKEY_DEFAULT;
-					mboxButton[1].text = "Go to menu";
-					mbox.flags = SDL_MESSAGEBOX_INFORMATION;
-					mbox.window =NULL;
-					mbox.title = "Pause";
-					mbox.message = "Pause";
-					mbox.numbuttons = 2;
-					mbox.buttons = mboxButton;
-					mbox.colorScheme = &colorScheme;
-					int btnid=0;
-					SDL_ShowMessageBox(&mbox, &btnid) ;
-					if (btnid == 1)
+					if (pause())
 						return true;
-
 				}break;
 				}
 			}
@@ -187,6 +161,45 @@ bool MainGameClass::start()
 		SDL_Delay(20 > b  ? 20 - b : 0);
 	}
 	return false;
+}
+
+bool MainGameClass::pause()
+{
+	SDL_MessageBoxData mbox;
+	SDL_MessageBoxButtonData mboxButton[2];
+	const SDL_MessageBoxColorScheme colorScheme =
+	{
+		{
+			{ 200, 200, 200 },
+			{   0,   0,   0 },
+			{ 255, 255, 255 },
+			{ 150, 150, 150 },
+			{ 255, 255, 255 }
+		}
+	};
+	mboxButton[0].buttonid = 0;
+	mboxButton[0].flags = SDL_MESSAGEBOX_BUTTON_RETURNKEY_DEFAULT | SDL_MESSAGEBOX_BUTTON_ESCAPEKEY_DEFAULT;
+	mboxButton[0].text = "Continue";
+	mboxButton[1].buttonid = 1;
+	mboxButton[1].flags = SDL_MESSAGEBOX_BUTTON_RETURNKEY_DEFAULT | SDL_MESSAGEBOX_BUTTON_ESCAPEKEY_DEFAULT;
+	mboxButton[1].text = "Go to menu";
+	mbox.flags = SDL_MESSAGEBOX_INFORMATION;
+	mbox.window = NULL;
+	mbox.title = "Pause";
+	mbox.message = "Pause";
+	mbox.numbuttons = 2;
+	mbox.buttons = mboxButton;
+	mbox.colorScheme = &colorScheme;
+	int btnid = 0;
+	SDL_ShowMessageBox(&mbox, &btnid);
+	if (btnid == 1)
+		return true;
+	return false;
+}
+
+std::string MainGameClass::getName()
+{
+	return plname;
 }
 
 MainGameClass::~MainGameClass()

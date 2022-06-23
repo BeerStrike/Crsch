@@ -14,6 +14,8 @@ private:
 public:
 	static MainMenu* load(SDL_Renderer* render, int wight, int height);
 	MainGameClass* start();
+	bool nameInput();
+	void setName(std::string);
 	~MainMenu();
 };
 
