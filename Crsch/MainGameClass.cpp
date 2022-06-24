@@ -102,6 +102,7 @@ bool MainGameClass::start()
 		player->enemycast(enemycastBuf, Enemies);
 		Grf->print();
 		htbr->print();
+		Grf->present();
 		for (int i = 0; i < Enemies.size(); i++)
 			if (Enemies[i]->goToPlayer(4)) {
 				Grf->dead();

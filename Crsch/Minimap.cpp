@@ -25,12 +25,11 @@ void Minimap::print()
 	double plx = player.getX() * xms / 100;
 	double ply = player.getY() * yms / 100;
 	for (double t = 0; t < 2 * M_PI; t += 0.01)
-		SDL_RenderDrawPoint(ren, plx -r+ r * std::cos(t) + r, ply+ r * std::sin(t));
+		SDL_RenderDrawPoint(ren, static_cast<int>(plx -r+ r * std::cos(t) + r), static_cast<int>(ply+ r * std::sin(t)));
 	for (int i = 0; i < enemies.size(); i++) {
 		for (double t = 0; t < 2 * M_PI; t += 0.01)
-			SDL_RenderDrawPoint(ren, enemies[i]->getX() * xms / 100 - r + r * std::cos(t) + r, enemies[i]->getY() * yms / 100 + r * std::sin(t));
+			SDL_RenderDrawPoint(ren, static_cast<int>(enemies[i]->getX() * xms / 100 - r + r * std::cos(t) + r), static_cast<int>(enemies[i]->getY() * yms / 100 + r * std::sin(t)));
 	}
 
-	SDL_RenderDrawLine(ren, plx , ply,plx+ 20* cos(player.getAngle()),ply- 20* sin(player.getAngle()));
+	SDL_RenderDrawLine(ren, static_cast<int>(plx) , static_cast<int>(ply), static_cast<int>(plx+ 20* cos(player.getAngle())), static_cast<int>(ply- 20* sin(player.getAngle())));
 }
-// * cos(player.getAngle()* sin(player.getAngle())

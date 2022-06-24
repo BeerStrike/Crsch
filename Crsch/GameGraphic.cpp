@@ -72,7 +72,6 @@ void GameGraphic::print()
      }
     if (minimap)
         minimap->print();
-    SDL_RenderPresent(ren);
 }
 
 bool GameGraphic::victory(int rec)

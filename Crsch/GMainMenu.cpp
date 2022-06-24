@@ -83,13 +83,14 @@ void GMainMenu::printInfo()
 	while(fin.getline(s, 1024, '\n')){
 		SDL_Surface* img = TTF_RenderUTF8_Solid(gFont, s, { 0x00,0x00,0x00 });
 		SDL_Texture* tex = SDL_CreateTextureFromSurface(ren, img);
-		SDL_Rect dstrect = { wt/4, ht / 4 +add*15,static_cast<int>(strlen(s))*10 , 20 };
+		SDL_Rect dstrect = { wt/4, ht / 4 +add*15,static_cast<int>(strlen(s))*5 , 20 };
 		SDL_RenderCopy(ren, tex, NULL, &dstrect);
 		SDL_FreeSurface(img);
 		SDL_DestroyTexture(tex);
 		add++;
-		SDL_RenderPresent(ren);
+	
 	}
+	SDL_RenderPresent(ren);
 
 }
 void GMainMenu::printScores()
@@ -109,9 +110,8 @@ void GMainMenu::printScores()
 		SDL_FreeSurface(img);
 		SDL_DestroyTexture(tex);
 		add++;
-		SDL_RenderPresent(ren);
 	}
-
+	SDL_RenderPresent(ren);
 }
 
 void GMainMenu::printNameInput(std::string nme)

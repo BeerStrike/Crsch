@@ -22,5 +22,8 @@ public:
 	SDL_Renderer* getRen() {
 		return ren;
 	}
+	void present() {
+		SDL_RenderPresent(ren);
+	}
 };
 

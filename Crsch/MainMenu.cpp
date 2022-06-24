@@ -29,6 +29,7 @@ MainMenu::MainMenu(GMainMenu* gf) :Grf(gf), chzn(0), numBtn(5), myName("")
 			 else if (event.type == SDL_KEYUP)
 				 switch (event.key.keysym.sym) {
 				 case SDLK_RETURN:
+					 if(myName!="")
 					 quit = true;
 					 break;
 				 case SDLK_BACKSPACE:
@@ -136,7 +137,7 @@ MainMenu::MainMenu(GMainMenu* gf) :Grf(gf), chzn(0), numBtn(5), myName("")
 			else if (event.type == SDL_QUIT)
 							quit = true;
 		}
-		SDL_Delay(100);
+		SDL_Delay(10);
 	}
 	return nullptr;
 }

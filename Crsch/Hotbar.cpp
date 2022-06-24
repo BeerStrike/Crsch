@@ -52,7 +52,6 @@ void Hotbar::print()
     SDL_RenderCopy(ren, tx, NULL, &dstrect);
     SDL_DestroyTexture(tx);
     SDL_FreeSurface(img);
-	SDL_RenderPresent(ren);
 }
 void Hotbar::shot()
 {
