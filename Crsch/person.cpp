@@ -18,3 +18,10 @@ bool Person::getDamage(int dmg)
 	hp -= dmg;
 	return hp <= 0;
 }
+
+int Person::getHP()
+{
+	return hp;
+}
+
+

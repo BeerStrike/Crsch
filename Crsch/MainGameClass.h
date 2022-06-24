@@ -6,6 +6,7 @@
 #include "Player.h"
 #include "Enemy.h"
 #include <vector>
+#include "Hotbar.h"
 class MainGameClass
 {
 private:
@@ -16,7 +17,8 @@ private:
 	std::string plname;
 	double* raycastBufer;
 	std::vector<double> enemycastBuf;
-	MainGameClass(Map* mp, Player* pl, GameGraphic* gr, std::string);
+	Hotbar* htbr;
+	MainGameClass(Map* , Player* , GameGraphic* ,Hotbar*, std::string);
 	long long startTime;
 public:
 	static MainGameClass* load(SDL_Renderer*, int, int,std::string, std::string);

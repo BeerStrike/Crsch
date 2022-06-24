@@ -51,7 +51,7 @@ int main(int argc, char* argv[])
 	SDL_RenderPresent(ren);
 	while (!quit) {
 		while (SDL_PollEvent(&event)) {
-			if (event.type == SDL_KEYDOWN || event.type == SDL_MOUSEBUTTONDOWN)
+			if (event.type == SDL_KEYUP || event.type == SDL_MOUSEBUTTONDOWN)
 				quit = true;
 			else if (event.type == SDL_QUIT) {
 				SDL_DestroyTexture(title);

@@ -2,7 +2,7 @@
 #include <SDL_image.h>
 #include <string>
 #include <SDL_ttf.h>
-GameGraphic::GameGraphic(SDL_Renderer* render, int wigth, int heigth, SDL_Texture* bd, SDL_Texture* gn, SDL_Texture* gnf, SDL_Texture* en,TTF_Font* fnt):BasicGraphic(render, wigth, heigth),background(bd),gun(gn),gunf(gnf),enemytext(en),timer(0),enemycastRes(nullptr),raycastRes(nullptr),minimap(nullptr),gFont(fnt)
+GameGraphic::GameGraphic(SDL_Renderer* render, int wigth, int heigth, SDL_Texture* bd, SDL_Texture* en,TTF_Font* fnt):BasicGraphic(render, wigth, heigth),background(bd),enemytext(en),enemycastRes(nullptr),raycastRes(nullptr),minimap(nullptr),gFont(fnt)
 {
 }
 
@@ -16,19 +16,6 @@ GameGraphic* GameGraphic::load(SDL_Renderer*ren, int wt, int ht)
     }
     SDL_Texture* background = SDL_CreateTextureFromSurface(ren, img);
     SDL_FreeSurface(img);
-    img = IMG_Load("Textures/gun.png");
-    if (!img) {
-        SDL_LogError(SDL_LOG_CATEGORY_APPLICATION, "Couldn't load gun.png: %s", SDL_GetError());
-        return nullptr;
-    }
-    SDL_Texture* gun= SDL_CreateTextureFromSurface(ren, img);
-    img = IMG_Load("Textures/gun2.png");
-    if (!img) {
-        SDL_LogError(SDL_LOG_CATEGORY_APPLICATION, "Couldn't load gun2.png: %s", SDL_GetError());
-        return nullptr;
-    }
-    SDL_Texture* gunf = SDL_CreateTextureFromSurface(ren, img);
-    SDL_FreeSurface(img);
     img = IMG_Load("Textures/enemy.png");
     if (!img) {
         SDL_LogError(SDL_LOG_CATEGORY_APPLICATION, "Couldn't load enemy.png: %s", SDL_GetError());
@@ -41,7 +28,7 @@ GameGraphic* GameGraphic::load(SDL_Renderer*ren, int wt, int ht)
         SDL_LogError(SDL_LOG_CATEGORY_APPLICATION, "Couldn't load font: %s", SDL_GetError());
         return nullptr;
     }
-    return new GameGraphic(ren, wt, ht, background, gun, gunf, enemytext,gFont);
+    return new GameGraphic(ren, wt, ht, background, enemytext,gFont);
 
 }
 
@@ -80,17 +67,9 @@ void GameGraphic::print()
         }
     }
       for(std::vector<double>::iterator i=(*enemycastRes).begin();i< (*enemycastRes).end();i+=2){
-       SDL_Rect dstrect = {static_cast<int>((*i)*wt) , ht/2- static_cast<int>(ht / 2 * (*(i + 1))) , static_cast<int>(50*(*(i + 1))), static_cast<int>(ht*(*(i + 1))) };
+       SDL_Rect dstrect = {static_cast<int>((*i)*wt) , ht/2- static_cast<int>(ht / 2 * (*(i + 1))) , static_cast<int>(150*(*(i + 1))), static_cast<int>(ht*(*(i + 1))) };
         SDL_RenderCopy(ren, enemytext, NULL, &dstrect);
      }
-    if (timer > 0) {
-        SDL_RenderCopy(ren, gunf, NULL, &dstrect);
-        timer--;
-    }
-    else {
-        SDL_RenderCopy(ren, gun, NULL, &dstrect);
-    }
-
     if (minimap)
         minimap->print();
     SDL_RenderPresent(ren);
@@ -111,8 +90,6 @@ bool GameGraphic::victory(int rec)
     SDL_FreeSurface(img);
     std::string r = u8"Ваш результат: " + std::to_string(rec) + u8" сек.";
     img = TTF_RenderUTF8_Solid(gFont, r.c_str(), { 0x00,0x00,0x00 });
-    if (!img)
-        return false;
     tx = SDL_CreateTextureFromSurface(ren, img);
     dstrect = { wt * 1 / 4,ht * 2 / 3,10 * static_cast<int>(r.length()),25 };
     SDL_RenderCopy(ren, tx, NULL, &dstrect);
@@ -120,11 +97,6 @@ bool GameGraphic::victory(int rec)
     SDL_FreeSurface(img);
     SDL_RenderPresent(ren);
     return true;
-}
-
-void GameGraphic::shot()
-{
-    timer = 5;
 }
 
 bool GameGraphic::dead()
@@ -172,6 +144,4 @@ GameGraphic::~GameGraphic()
     SDL_DestroyTexture(background);
     TTF_CloseFont(gFont);
     SDL_DestroyTexture(enemytext);
-    SDL_DestroyTexture(gun);
-    SDL_DestroyTexture(gunf);
 }

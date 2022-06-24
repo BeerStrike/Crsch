@@ -1,5 +1,5 @@
 #include "MainMenu.h"
-MainMenu::MainMenu(GMainMenu* gf) :Grf(gf), chzn(0), numBtn(4), myName("")
+MainMenu::MainMenu(GMainMenu* gf) :Grf(gf), chzn(0), numBtn(5), myName("")
 {
 }
 
@@ -48,9 +48,10 @@ MainMenu::MainMenu(GMainMenu* gf) :Grf(gf), chzn(0), numBtn(4), myName("")
 {
 	SDL_Event event;
 	bool quit = false;
-	if (myName == "")
+	if (myName == "") {
 		if (!nameInput())
 			return nullptr;
+	}
 	while (!quit) {
 		Grf->print();
 		while (SDL_PollEvent(&event)) {
@@ -100,7 +101,7 @@ MainMenu::MainMenu(GMainMenu* gf) :Grf(gf), chzn(0), numBtn(4), myName("")
 						bool q = false;
 						while (!q) {
 							while (SDL_PollEvent(&event)) {
-								if (event.type == SDL_KEYDOWN)		
+								if (event.type == SDL_KEYUP)		
 									q = true;
 								else if (event.type == SDL_QUIT)
 									q = quit = true;
@@ -113,7 +114,7 @@ MainMenu::MainMenu(GMainMenu* gf) :Grf(gf), chzn(0), numBtn(4), myName("")
 						bool q = false;
 						while (!q) {
 							while (SDL_PollEvent(&event)) {
-								if (event.type == SDL_KEYDOWN)
+								if (event.type == SDL_KEYUP)
 									q=true;
 								else if(event.type == SDL_QUIT)
 									q = quit = true;
@@ -122,6 +123,10 @@ MainMenu::MainMenu(GMainMenu* gf) :Grf(gf), chzn(0), numBtn(4), myName("")
 					}
 						break;
 					case 3:
+						if (!nameInput())
+						return nullptr;
+						break;
+					case 4:
 						return nullptr;
 					default:
 						break;

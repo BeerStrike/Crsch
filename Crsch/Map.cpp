@@ -1,6 +1,6 @@
 #include "Map.h"
 
-Map::Map(std::ifstream& fin)
+Map::Map(std::ifstream& fin, std::string str):MapName(str),startx(0),starty(0)
 {
     fin >> size;
     map = new int* [size];
@@ -22,7 +22,7 @@ Map* Map::load(std::string str)
 {
     std::ifstream fin(str);
     if (fin)
-        return new Map(fin);
+        return new Map(fin,str.substr(5,str.length()-9));
     else
     return nullptr;
 }
@@ -48,6 +48,11 @@ int Map::getPlayerX()
 int Map::getPlayerY()
 {
     return starty;
+}
+
+std::string Map::getMapName()
+{
+    return MapName;
 }
 
 void Map::setCell(int x, int y, int nw)

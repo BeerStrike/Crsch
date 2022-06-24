@@ -25,6 +25,6 @@ bool Enemy::goToPlayer(double step)
 		y = nwy;
 	}
 		if (sqrt(pow(player->getX() - x, 2) + pow(player->getY()-y, 2)) < 30)
-			return player->getDamage(20);
+			return player->getDamage(5);
 		return false;
 }

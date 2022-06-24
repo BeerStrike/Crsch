@@ -12,5 +12,6 @@ public:
 	int getX();
 	int getY();
 	bool getDamage(int);
+	int getHP();
 };
 

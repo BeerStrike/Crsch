@@ -2,24 +2,24 @@
 #include "SDL_ttf.h"
 #include <fstream>
 #include <string>
-GMainMenu::GMainMenu(SDL_Renderer* render, int wigth, int heigth, SDL_Texture* fne, SDL_Texture*fbtn, SDL_Texture*nbtn,TTF_Font *fnt) :BasicGraphic(render, wigth, heigth), btnnum(4), onNum(0),fone(fne),btn(fbtn),onBtn(nbtn),gFont(fnt)
+GMainMenu::GMainMenu(SDL_Renderer* render, int wigth, int heigth, SDL_Texture* fne, SDL_Texture*fbtn, SDL_Texture*nbtn,TTF_Font *fnt) :BasicGraphic(render, wigth, heigth), btnnum(5), onNum(0),fone(fne),btn(fbtn),onBtn(nbtn),gFont(fnt)
 {
 	SDL_Surface * img;
-	std::ifstream fin("strds.txt");
-	char s[64];
-	fin.getline(s, 64, '\n');
-	img = TTF_RenderUTF8_Solid(gFont,s, { 0xff,0xff,0x00 });
+	img = TTF_RenderUTF8_Solid(gFont,u8"Начать игру", { 0xff,0xff,0x00 });
 	texts[0] = SDL_CreateTextureFromSurface(ren, img);
-	fin >> s;
-	img = TTF_RenderUTF8_Solid(gFont, s, { 0xff,0xff,0x00 });
+	SDL_FreeSurface(img);
+	img = TTF_RenderUTF8_Solid(gFont, u8"Рекорды", { 0xff,0xff,0x00 });
 	texts[1] = SDL_CreateTextureFromSurface(ren, img);
-	fin >> s;
-	img = TTF_RenderUTF8_Solid(gFont, s, { 0xff,0xff,0x00 });
+	SDL_FreeSurface(img);
+	img = TTF_RenderUTF8_Solid(gFont, u8"Справка", { 0xff,0xff,0x00 });
 	texts[2] = SDL_CreateTextureFromSurface(ren, img);
-	fin >> s;
-	img = TTF_RenderUTF8_Solid(gFont, s, { 0xff,0xff,0x00 });
+	SDL_FreeSurface(img);
+	img = TTF_RenderUTF8_Solid(gFont, u8"Смена игрока", { 0xff,0xff,0x00 });
 	texts[3] = SDL_CreateTextureFromSurface(ren, img);
-	fin.close();
+	SDL_FreeSurface(img);
+	img = TTF_RenderUTF8_Solid(gFont, u8"Выход", { 0xff,0xff,0x00 });
+	texts[4] = SDL_CreateTextureFromSurface(ren, img);
+	SDL_FreeSurface(img);
 }
 
  GMainMenu* GMainMenu::load(SDL_Renderer* ren, int wigth, int heigth)
