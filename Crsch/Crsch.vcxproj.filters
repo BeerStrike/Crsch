@@ -19,6 +19,12 @@
     <Filter Include="Файлы заголовков\Graphic">
       <UniqueIdentifier>{d82e35b1-c7d4-4a73-87ba-e2d664021de9}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Файлы заголовков\Person">
+      <UniqueIdentifier>{bcf8fa46-2487-4f4e-a292-8661678c7a0d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Исходные файлы\Person">
+      <UniqueIdentifier>{3c805a5b-e55d-4a40-aab7-3ca9b2c6997c}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -42,17 +48,17 @@
     <ClCompile Include="Minimap.cpp">
       <Filter>Исходные файлы\Graphic</Filter>
     </ClCompile>
-    <ClCompile Include="Player.cpp">
-      <Filter>Исходные файлы</Filter>
-    </ClCompile>
-    <ClCompile Include="Enemy.cpp">
-      <Filter>Исходные файлы</Filter>
-    </ClCompile>
-    <ClCompile Include="person.cpp">
-      <Filter>Исходные файлы</Filter>
-    </ClCompile>
     <ClCompile Include="Hotbar.cpp">
       <Filter>Исходные файлы\Graphic</Filter>
+    </ClCompile>
+    <ClCompile Include="Enemy.cpp">
+      <Filter>Исходные файлы\Person</Filter>
+    </ClCompile>
+    <ClCompile Include="person.cpp">
+      <Filter>Исходные файлы\Person</Filter>
+    </ClCompile>
+    <ClCompile Include="Player.cpp">
+      <Filter>Исходные файлы\Person</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -77,17 +83,17 @@
     <ClInclude Include="Minimap.h">
       <Filter>Файлы заголовков\Graphic</Filter>
     </ClInclude>
-    <ClInclude Include="Player.h">
-      <Filter>Файлы заголовков</Filter>
-    </ClInclude>
-    <ClInclude Include="Enemy.h">
-      <Filter>Файлы заголовков</Filter>
-    </ClInclude>
-    <ClInclude Include="person.h">
-      <Filter>Файлы заголовков</Filter>
-    </ClInclude>
     <ClInclude Include="Hotbar.h">
       <Filter>Файлы заголовков\Graphic</Filter>
+    </ClInclude>
+    <ClInclude Include="person.h">
+      <Filter>Файлы заголовков\Person</Filter>
+    </ClInclude>
+    <ClInclude Include="Player.h">
+      <Filter>Файлы заголовков\Person</Filter>
+    </ClInclude>
+    <ClInclude Include="Enemy.h">
+      <Filter>Файлы заголовков\Person</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

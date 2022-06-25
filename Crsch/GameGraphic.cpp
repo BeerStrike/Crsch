@@ -49,7 +49,7 @@ void GameGraphic::print()
             case 1:
                 SDL_SetRenderDrawColor(ren, 212 * l / ht, 153 * l / ht, 113 * l / ht, 0xFF);
                 break;
-            case 6:
+            case 9:
                 SDL_SetRenderDrawColor(ren, 0xFF * l / ht, 0,0, 0xFF);
                 break;
             case 7:
@@ -58,8 +58,8 @@ void GameGraphic::print()
             case 8:
                 SDL_SetRenderDrawColor(ren,0 ,0, 0xFF * l / ht, 0xFF);
                 break;
-            case 9:
-                SDL_SetRenderDrawColor(ren, 212 * l / ht, 153 * l / ht, 113 * l / ht, 0xFF);
+            case 6:
+                SDL_SetRenderDrawColor(ren, 0xFF * l / ht, 0xFF* l / ht, 0, 0xFF);
                 break;
             }
             SDL_RenderFillRect(ren, &dstrect);

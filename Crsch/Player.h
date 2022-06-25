@@ -8,14 +8,16 @@ class Player:public Person
 {
 private:
 	double angle;
+	int ammo;
 public:
 	Player(Map*);
 	bool movefrw(double);
 	bool moveBack(double);
 	void rotateLeft(double);
 	void rotateRight(double);
-	void shot(std::vector<Enemy*>&);
+	bool shot(std::vector<Enemy*>&);
 	void raycast(double*,int, std::vector<Enemy*>&);
+	int getAmmo();
 	void enemycast(std::vector<double>&, std::vector<Enemy*>&);
 	double getAngle();
 };

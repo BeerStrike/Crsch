@@ -4,11 +4,15 @@
 #include "MainMenu.h"
 #include "MainGameClass.h"
 #include <SDL_image.h>
-#define W 800
-#define H 600
+#include <fstream>
 
 int main(int argc, char* argv[])
 {
+	int W,  H;
+	std::ifstream fin("resolution.txt");
+	fin >> W;
+	fin >> H;
+	fin.close();
 	if (SDL_Init(SDL_INIT_EVERYTHING) < 0)
 	{
 		SDL_LogError(SDL_LOG_CATEGORY_APPLICATION, "Err SLD_Init: %s", SDL_GetError());

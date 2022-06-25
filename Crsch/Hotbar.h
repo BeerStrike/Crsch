@@ -6,11 +6,14 @@ class Hotbar :
     public BasicGraphic
 {
 private:
-    Hotbar(SDL_Renderer* , int , int, SDL_Texture*, SDL_Texture*, SDL_Texture*,Player*,TTF_Font*);
+    Hotbar(SDL_Renderer* , int , int, SDL_Texture*, SDL_Texture*, SDL_Texture*, SDL_Texture*, SDL_Texture*,Player*,TTF_Font*);
     SDL_Texture* backplate;
     SDL_Texture* gun;
     SDL_Texture* gunf;
-    int timer;
+    SDL_Texture* fl1;
+    SDL_Texture* fl2;
+    long long timer;
+    long long shtdl;
     TTF_Font* gFont;
     Player* player;
 public:

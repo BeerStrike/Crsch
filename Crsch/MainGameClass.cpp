@@ -168,8 +168,8 @@ bool MainGameClass::start()
 					turnRight = true;
 					break;
 				case SDLK_LCTRL:
-					player->shot(Enemies);
-					htbr->shot();
+					if(player->shot(Enemies))
+						htbr->shot();
 					break;
 				}
 			}

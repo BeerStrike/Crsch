@@ -1,7 +1,7 @@
 #define _USE_MATH_DEFINES
 #include "Player.h"
 #include <cmath>
-Player::Player(Map* mp):Person(mp, mp->getPlayerX() * 100 + 50, mp->getPlayerY() * 100 + 50,100)
+Player::Player(Map* mp):Person(mp, mp->getPlayerX() * 100 + 50, mp->getPlayerY() * 100 + 50,100),ammo(30)
 {
 	angle = 0;
 }
@@ -14,6 +14,14 @@ bool Player::movefrw(double dst)
 	if (at == 0) {
 		x = nxtx;
 		y = nxty;
+	}
+	else if (at == 11) {
+		ammo += 10;
+		map->setCell(static_cast<int>(nxtx / 100), static_cast<int>(nxty / 100), 0);
+	}
+	else if (at == 12) {
+		hp += 30;
+		map->setCell(static_cast<int>(nxtx / 100), static_cast<int>(nxty / 100), 0);
 	}
 	else if (at == 5)
 		return true;
@@ -36,18 +44,23 @@ void Player::rotateRight(double rte)
 	angle = (angle - rte< 0) ? angle - rte + 2 * M_PI : angle - rte;
 }
 
-void Player::shot(std::vector<Enemy*>& enm)
+bool Player::shot(std::vector<Enemy*>& enm)
 {
-	for (int i = 0; i < enm.size(); i++) {
-		double xl = enm[i]->getX() - x;
-		double yl = enm[i]->getY()-y;
-		double l = sqrt(pow(xl, 2) + pow(yl, 2));
-		double ang =abs(( yl<=0?acos(xl / l): 2*M_PI-acos(xl / l))-angle);
-		if ( l< 400 &&ang<M_PI/20) {
-			if (enm[i]->getDamage(34))
-			enm.erase(enm.begin() + i);
+	if (ammo) {
+		for (int i = 0; i < enm.size(); i++) {
+			double xl = enm[i]->getX() - x;
+			double yl = enm[i]->getY() - y;
+			double l = sqrt(pow(xl, 2) + pow(yl, 2));
+			double ang = abs((yl <= 0 ? acos(xl / l) : 2 * M_PI - acos(xl / l)) - angle);
+			if (l < 400 && ang < M_PI / 20) {
+				if (enm[i]->getDamage(34))
+					enm.erase(enm.begin() + i);
+			}
 		}
+		ammo--;
+		return true;
 	}
+	return false;
 }
 
 void Player::raycast(double* heights,int num, std::vector<Enemy*>&enm)
@@ -57,17 +70,17 @@ void Player::raycast(double* heights,int num, std::vector<Enemy*>&enm)
 	double mgs =600;
 	for (double i = angle+M_PI / 6; i > angle-M_PI / 6; i -= step) {
 		for (int j = 0; j < mgs; j+=10) {
-			int xm = (x + j * cos(i)) / 100;
-			int ym = (y +  - j * sin(i)) / 100;
+			int xm = static_cast<int>((x + j * cos(i)) / 100);
+			int ym = static_cast<int>((y +  - j * sin(i)) / 100);
 			if (map->at(xm, ym) == 3) {
 				map->setCell(xm, ym, 0);
 				enm.push_back(new Enemy(map, this, xm , ym));
 			}
-			if (map->at(xm, ym) == 1|| (map->at(xm, ym)>=6&& map->at(xm, ym)<=9)) {
-				int d= map->at(xm, ym);
+			int d = map->at(xm, ym);
+			if (d == 1|| (d>=6&& d<=9)) {
 				while (map->at(xm, ym) == 1 || (map->at(xm, ym) >= 6 && map->at(xm, ym) <= 9)) {
-					xm = (x + j * cos(i)) / 100;
-					ym = (y + -j * sin(i)) / 100;
+					xm = static_cast<int>((x + j * cos(i)) / 100);
+					ym = static_cast<int>((y + -j * sin(i)) / 100);
 					j--;
 				}
 				j++;
@@ -83,6 +96,10 @@ void Player::raycast(double* heights,int num, std::vector<Enemy*>&enm)
 		}
 		n+=2;
 	}
+}
+int Player::getAmmo()
+{
+	return ammo;
 }
 void Player::enemycast(std::vector<double>& res, std::vector<Enemy*>& enm) {
 	res.clear();
