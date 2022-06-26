@@ -25,7 +25,7 @@ bool Player::movefrw(double dst)
 	}
 	else if (at == 5)
 		return true;
-	return false;
+	return false; 
 	
 }
 
